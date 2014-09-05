@@ -68,7 +68,9 @@ else:
                 print("Dispatcher asking workers to shut down")
                 comm.bcast(False, root=0)
                 exit(0)
+            print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = MPI.ANY_TAG);
+            print("recieved message over MPI: " + str(msg))
             if(isinstance(msg, tuple)) and len(msg) > 0:
                 if(msg[0] == "work_request" and len(msg) > 1):
                     worker_rank = msg[1]
