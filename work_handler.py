@@ -10,6 +10,17 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
 
+def constructJoblist(jobfile):
+    joblist = [{},{}] #incomplete, complete
+    jobno = 0;
+    for line in jobfile:
+        if line[0] == '#':
+            continue
+        joblist[0][jobno] = line
+        jobno = jobno+1
+    return joblist
+
+
 #each worker sends its work requests, and the dispatcher loops with an indiscriminate recieve,
 #servicing requests as they arrive
 
@@ -71,15 +82,6 @@ else:
                     joblist[1][work_ID] = (ret_code, rank, cmd)
                         
             
-def constructJoblist(jobfile):
-    joblist = [{},{}] #incomplete, complete
-    jobno = 0;
-    for line in jobfile:
-        if line[0] == '#':
-            continue
-        joblist[0][jobno] = line
-        jobno = jobno+1
-    return joblist
 
 
 
