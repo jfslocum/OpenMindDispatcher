@@ -7,7 +7,7 @@ import sys, os.path, cPickle, atexit
 jobfilename = sys.argv[1]
 
 comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
+rank = int(os.environ['SLURM_PROCID'])
 
 
 def constructJoblist(jobfile):
