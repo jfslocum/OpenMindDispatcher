@@ -40,7 +40,7 @@ if rank > 0:
             print("worker %i recieved kill request; exiting" % rank)
             exit(0)
 else:
-    print("dispatcher now online")
+    print("dispatcher now online; comm rank is " + str(comm.Get_rank()))
     with open(jobfilename) as jobfile:
         pcklfilename = jobfilename + ".pckl"
         joblist = []
