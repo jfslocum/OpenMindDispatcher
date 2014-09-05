@@ -34,8 +34,8 @@ else:
         pcklfilename = jobfilename + ".pckl"
         joblist = []
         if os.path.isfile(pcklfilename):
-            with open(pcklfilename, 'rb') as picklefile
-            joblist = cPickle.load(picklefile)
+            with open(pcklfilename, 'rb') as picklefile:
+                joblist = cPickle.load(picklefile)
         else:
             #first time this job has run; must construct a new joblist
             joblist = constructJoblist(jobfile)
@@ -65,7 +65,7 @@ else:
                     work_ID, cmd = getNextJob(joblist)
                     #then send it to the worker
                     comm.send((work_ID, cmd), dest=worker_rank, tag=worker_rank)
-                else if(msg[0] == "work_done" and len(msg) > 4):
+                elif(msg[0] == "work_done" and len(msg) > 4):
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
                     joblist[1][work_ID] = (ret_code, rank, cmd)
