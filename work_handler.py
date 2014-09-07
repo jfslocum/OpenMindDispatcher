@@ -28,14 +28,14 @@ if rank > 0:
     print("worker %i online - asking for jobs" % rank)
     while(True):
         print("worker %i asking for a job" % rank)
-        comm.send(("work_request", rank), dest=0, tag=rank)
-        msg = comm.recv(source=0, tag=rank)
+        comm.send(("work_request", rank), dest=0, tag=0)
+        msg = comm.recv(source=0, tag=0)
         if msg:
             (work_ID, cmd) = msg
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
             ret_code = call(cmd, shell=True)
             print("""worker %i completed task %i with return code %i""" % (rank, work_ID, ret_code))
-            comm.send(("work_done", rank, work_ID, ret_code, cmd),  dest=0, tag=rank)
+            comm.send(("work_done", rank, work_ID, ret_code, cmd),  dest=0, tag=0)
         else:
             print("worker %i recieved kill request; exiting" % rank)
             exit(0)
@@ -69,7 +69,7 @@ else:
                 comm.bcast(False, root=0)
                 exit(0)
             print("Dispatcher looking for job requests")
-            msg = comm.recv(source = MPI.ANY_SOURCE, tag = MPI.ANY_TAG);
+            msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
             print("recieved message over MPI: " + str(msg))
             if(isinstance(msg, tuple)) and len(msg) > 0:
                 if(msg[0] == "work_request" and len(msg) > 1):
