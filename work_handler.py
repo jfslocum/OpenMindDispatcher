@@ -29,6 +29,7 @@ if rank > 0:
     while(True):
         print("worker %i asking for a job" % rank)
         comm.send(("work_request", rank), dest=0, tag=0)
+        print("job request for worker %i recieved; now waiting for response" % rank)
         msg = comm.recv(source=0, tag=0)
         if msg:
             (work_ID, cmd) = msg
