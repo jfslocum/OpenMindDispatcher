@@ -92,7 +92,7 @@ else:
                     active_workers -=1
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
-                    print("Dispatcher received work done notification for job: " + str(msg))
+                    print("dispatcher received work done notification for job: " + str(msg))
                     joblist[1][work_ID] = (ret_code, rank, cmd)
                         
             
