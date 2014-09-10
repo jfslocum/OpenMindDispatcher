@@ -21,6 +21,12 @@ def constructJoblist(jobfile):
     return joblist
 
 
+def getNextJob(joblist):
+    if(len(joblist[0].keys()) is 0):
+        return [9001, 'echo "JOBLIST EMPTY ON DISPATCHER BUT STILL RECIEVED JOB"']
+    else:
+        return joblist[0].popitem()
+    
 #each worker sends its work requests, and the dispatcher loops with an indiscriminate recieve,
 #servicing requests as they arrive
 
