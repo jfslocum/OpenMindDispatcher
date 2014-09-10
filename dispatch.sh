@@ -1,2 +1,2 @@
 #!/bin/bash
-srun -l ./work_handler.py $1
+srun -l --mpi=pmi2 ./work_handler.py $1
