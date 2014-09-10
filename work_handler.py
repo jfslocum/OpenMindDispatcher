@@ -36,7 +36,7 @@ if rank > 0:
         print("worker %i asking for a job" % rank)
         comm.send(("work_request", rank), dest=0, tag=0)
         print("job request for worker %i recieved; now waiting for response" % rank)
-        msg = comm.recv(source=0, tag=0)
+        msg = comm.recv(source=0, tag=rank)
         if msg:
             (work_ID, cmd) = msg
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
@@ -84,10 +84,12 @@ else:
                     #find work
                     work_ID, cmd = getNextJob(joblist)
                     #then send it to the worker
+                    print("Dispatching sending out job: " + str((work_ID, cmd)))
                     comm.send((work_ID, cmd), dest=worker_rank, tag=worker_rank)
                 elif(msg[0] == "work_done" and len(msg) > 4):
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
+                    print("Dispatdcher received work done notification for job: " + msg)
                     joblist[1][work_ID] = (ret_code, rank, cmd)
                         
             
