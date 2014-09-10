@@ -89,7 +89,7 @@ else:
                 elif(msg[0] == "work_done" and len(msg) > 4):
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
-                    print("Dispatdcher received work done notification for job: " + msg)
+                    print("Dispatdcher received work done notification for job: " + str(msg))
                     joblist[1][work_ID] = (ret_code, rank, cmd)
                         
             
