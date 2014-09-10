@@ -76,18 +76,18 @@ else:
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
             print("recieved message over MPI: " + str(msg))
-            if(len(joblist[0].keys()) == 0):
-                print("No jobs left: asking worker to terminate")
-                comm.send(False, dest=msg[1], tag=msg[1])
-                workers.pop(msg[1])
-                if(len(workers.keys()) == 0):
-                    print("No workers left: terminating")
-                    exit(0)
             if(isinstance(msg, tuple)) and len(msg) > 0:
                 if(msg[0] == "work_request" and len(msg) > 1):
                     worker_rank = msg[1]
                     workers[worker_rank]=True
                     #find work
+                    if(len(joblist[0].keys()) == 0):
+                        print("No jobs left: asking worker to terminate")
+                        comm.send(False, dest=msg[1], tag=msg[1])
+                        workers.pop(msg[1])
+                        if(len(workers.keys()) == 0):
+                            print("No workers left: terminating")
+                            exit(0)
                     work_ID, cmd = getNextJob(joblist)
                     #then send it to the worker
                     print("Dispatcher sending out job: " + str((work_ID, cmd)))
