@@ -8,7 +8,7 @@ jobfilename = sys.argv[1]
 
 comm = MPI.COMM_WORLD
 rank = int(os.environ['SLURM_PROCID'])
-
+num_workers = int(os.environ['SLURM_NTASKS']) - 1
 
 def constructJoblist(jobfile):
     joblist = [{},{}] #incomplete, complete
@@ -47,6 +47,8 @@ if rank > 0:
             print("worker %i recieved kill request; exiting" % rank)
             exit(0)
 else:
+    if num_workers ==0:
+        exit(0)
     print("dispatcher now online; comm rank is " + str(comm.Get_rank()))
     with open(jobfilename) as jobfile:
         pcklfilename = jobfilename + ".pckl"
@@ -72,6 +74,7 @@ else:
         atexit.register(saveJobs)
         atexit.register(writeLog)        
         workers = {}
+        num_workers_killed = 0
         while True:
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
@@ -84,8 +87,8 @@ else:
                     if(len(joblist[0].keys()) == 0):
                         print("No jobs left: asking worker to terminate")
                         comm.send(False, dest=msg[1], tag=msg[1])
-                        workers.pop(msg[1])
-                        if(len(workers.keys()) == 0):
+                        num_workers_killed +=1
+                        if(num_workers_killed == num_workers):
                             print("No workers left: terminating")
                             exit(0)
                     work_ID, cmd = getNextJob(joblist)
