@@ -70,8 +70,9 @@ else:
                     logfile.write(str(key) + str(joblist[1][key][0]) + str(joblist[1][key][2])+"\n")
         atexit.register(saveJobs)
         atexit.register(writeLog)        
+        active_workers = 0
         while True:
-            if len(joblist[0].keys()) is 0:
+            if len(joblist[0].keys()) is 0 and active_workers == 0:
                 print("Dispatcher asking workers to shut down")
                 comm.bcast(False, root=0)
                 exit(0)
@@ -80,6 +81,7 @@ else:
             print("recieved message over MPI: " + str(msg))
             if(isinstance(msg, tuple)) and len(msg) > 0:
                 if(msg[0] == "work_request" and len(msg) > 1):
+                    active_workers +=1
                     worker_rank = msg[1]
                     #find work
                     work_ID, cmd = getNextJob(joblist)
@@ -87,9 +89,10 @@ else:
                     print("Dispatching sending out job: " + str((work_ID, cmd)))
                     comm.send((work_ID, cmd), dest=worker_rank, tag=worker_rank)
                 elif(msg[0] == "work_done" and len(msg) > 4):
+                    active_workers -=1
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
-                    print("Dispatdcher received work done notification for job: " + str(msg))
+                    print("Dispatcher received work done notification for job: " + str(msg))
                     joblist[1][work_ID] = (ret_code, rank, cmd)
                         
             
