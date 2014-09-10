@@ -71,26 +71,28 @@ else:
                     logfile.write(str(key) + str(joblist[1][key][0]) + str(joblist[1][key][2])+"\n")
         atexit.register(saveJobs)
         atexit.register(writeLog)        
-        active_workers = 0
+        workers = {}
         while True:
-            if len(joblist[0].keys()) is 0 and active_workers == 0:
-                print("Dispatcher asking workers to shut down")
-                comm.bcast(False, root=0)
-                exit(0)
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
             print("recieved message over MPI: " + str(msg))
+            if(len(joblist[0].keys()) == 0):
+                print("No jobs left: asking worker to terminate")
+                comm.send(False, dest=msg[1] tag=msg[1])
+                workers.pop(msg[1])
+                if(len(workers.keys()) == 0):
+                    print("No workers left: terminating")
+                    exit(0)
             if(isinstance(msg, tuple)) and len(msg) > 0:
                 if(msg[0] == "work_request" and len(msg) > 1):
-                    active_workers +=1
                     worker_rank = msg[1]
+                    workers[worker_rank]=True
                     #find work
                     work_ID, cmd = getNextJob(joblist)
                     #then send it to the worker
                     print("Dispatcher sending out job: " + str((work_ID, cmd)))
                     comm.send((work_ID, cmd), dest=worker_rank, tag=worker_rank)
                 elif(msg[0] == "work_done" and len(msg) > 4):
-                    active_workers -=1
                     #write in the log file that the job has been done
                     _, rank, work_ID, ret_code, cmd = msg
                     print("dispatcher received work done notification for job: " + str(msg))
