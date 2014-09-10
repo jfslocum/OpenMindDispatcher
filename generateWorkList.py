@@ -10,7 +10,7 @@ noise_coeffs = [5, 10, 20, 30]
 
 
 OUTPUT_FOLDER = "/om/user/jslocum/hmm2dlearning/hmmtrainresults"
-MATLAB_CALL = "matlab -singleCompThread -nojvm -nodisplay -nosplash -r runTrials('%s', '%s', '%s', '%s', 100, %i, 'modelChange', 800, '%s'"
+MATLAB_CALL = "matlab -singleCompThread -nojvm -nodisplay -nosplash -r runTrials('%s', '%s', '%s', '%s', 100, %i, 'modelChange', 800, '%s'\n"
 
 def writeWorklistToFile(f):
     for truth_idx in range(pow(len(neuronTypes), 2)):
