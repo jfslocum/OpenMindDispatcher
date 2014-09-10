@@ -57,6 +57,7 @@ else:
         else:
             #first time this job has run; must construct a new joblist
             joblist = constructJoblist(jobfile)
+        print(joblist)
         #register atexit function to save joblist/log
         def saveJobs():
             with open(pcklfilename, 'wb') as picklefile:
@@ -86,7 +87,7 @@ else:
                     #find work
                     work_ID, cmd = getNextJob(joblist)
                     #then send it to the worker
-                    print("Dispatching sending out job: " + str((work_ID, cmd)))
+                    print("Dispatcher sending out job: " + str((work_ID, cmd)))
                     comm.send((work_ID, cmd), dest=worker_rank, tag=worker_rank)
                 elif(msg[0] == "work_done" and len(msg) > 4):
                     active_workers -=1
