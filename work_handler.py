@@ -78,7 +78,7 @@ else:
             print("recieved message over MPI: " + str(msg))
             if(len(joblist[0].keys()) == 0):
                 print("No jobs left: asking worker to terminate")
-                comm.send(False, dest=msg[1] tag=msg[1])
+                comm.send(False, dest=msg[1], tag=msg[1])
                 workers.pop(msg[1])
                 if(len(workers.keys()) == 0):
                     print("No workers left: terminating")
