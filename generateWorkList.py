@@ -25,5 +25,5 @@ def writeWorklistToFile(f):
                                        guess_type1, guess_type2, noise, OUTPUT_FOLDER))
 
 
-with open(sys.argv[1]) as f:
+with open(sys.argv[1], 'w') as f:
     writeWorklistToFile(f)
