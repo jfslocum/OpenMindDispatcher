@@ -1,8 +1,11 @@
 #!/cm/shared/openmind/anaconda/1.9.2/bin/python
+print("Initializing work handler...")
 from mpi4py import MPI
 from subprocess import call
 
 import sys, os.path, cPickle, atexit
+
+print("Imports successful")
 
 jobfilename = "/home/jslocum/OpenMindDispatcher/testing/test.txt" #sys.argv[1]
 
