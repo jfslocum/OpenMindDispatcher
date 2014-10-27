@@ -1,6 +1,5 @@
 #!/cm/shared/openmind/anaconda/1.9.2/bin/python
-print("Initializing work handler... importing mpi")
-from mpi4py import MPI
+print("Initializing work handler... ")
 
 print("importing subprocess...")
 from subprocess import call
@@ -12,6 +11,8 @@ print("cpickle")
 import cPickle
 print("atexit")
 import atexit
+print("mpi")
+from mpi4py import MPI
 
 print("Imports successful")
 
