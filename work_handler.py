@@ -4,7 +4,7 @@ from subprocess import call
 
 import sys, os.path, cPickle, atexit
 
-jobfilename = sys.argv[1]
+jobfilename = "/home/jslocum/OpenMindDispatcher/testing/test.txt" #sys.argv[1]
 
 comm = MPI.COMM_WORLD
 rank = int(os.environ['SLURM_PROCID'])
