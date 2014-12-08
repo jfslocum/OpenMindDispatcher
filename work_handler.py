@@ -16,7 +16,8 @@ from mpi4py import MPI
 
 print("Imports successful")
 
-jobfilename = "/home/jslocum/OpenMindDispatcher/testing/test.txt" #sys.argv[1]
+#"/home/jslocum/OpenMindDispatcher/testing/test.txt"
+jobfilename = sys.argv[1]
 
 comm = MPI.COMM_WORLD
 rank = int(os.environ['SLURM_PROCID'])
