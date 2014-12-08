@@ -1,5 +1,6 @@
 #!/cm/shared/openmind/anaconda/1.9.2/bin/python
 from mpi4py import MPI
+import os
 comm = MPI.COMM_WORLD
 rank = int(os.environ['SLURM_PROCID'])
 
