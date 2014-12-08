@@ -20,7 +20,7 @@ print("Imports successful")
 jobfilename = sys.argv[1]
 
 comm = MPI.COMM_WORLD
-rank = int(os.environ['SLURM_PROCID'])
+rank = comm.Get_rank()
 num_workers = int(os.environ['SLURM_NTASKS']) - 1
 
 def constructJoblist(jobfile):
