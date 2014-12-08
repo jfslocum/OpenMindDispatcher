@@ -1,7 +1,7 @@
 #!/cm/shared/openmind/anaconda/1.9.2/bin/python
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
+rank = int(os.environ['SLURM_PROCID'])
 
 if rank == 0:
     data = {'a': 7, 'b': 3.14}
