@@ -1,4 +1,4 @@
-#!/cm/shared/openmind/anaconda/1.9.2/bin/python
+#!/cm/shared/openmind/anaconda/2.1.0/bin/python
 print("Initializing work handler... ")
 
 print("importing subprocess...")
