@@ -83,7 +83,7 @@ else:
                     return
                 logfile.write("JOB_ID\tRETVAL\tCMD\n")
                 for key in joblist[1].keys():
-                    logfile.write(str(key) + str(joblist[1][key][0]) + str(joblist[1][key][2])+"\n")
+                    logfile.write(str(key) + '\t' + str(joblist[1][key][0]) + '\t$' + str(joblist[1][key][2])+"\n")
         atexit.register(saveJobs)
         atexit.register(writeLog)        
         workers = {}
