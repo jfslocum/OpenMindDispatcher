@@ -14,7 +14,7 @@ print("Imports successful")
 
 #"/home/jslocum/OpenMindDispatcher/testing/test.txt"
 jobfilename = sys.argv[1]
-logfile_path = './'
+logfile_path = ''
 if(len(sys.argv) > 2):
     logfile_path = sys.argv[2]
 
@@ -57,8 +57,12 @@ if rank > 0:
             (work_ID, cmd) = msg
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
             ret_code = -1
-            with open(os.path.join(logfile_path,jobfilename+'.task_%s.out' % work_ID), 'w') as output:
-                with open(jobfilename+'.task_%s.err' % work_ID, 'w') as err:
+            if logfile_path:
+                fp = os.path.join(logfile_path,'task_%s' % work_ID)
+            else:
+                fp = jobfilename+'.task_%s'
+            with open(fp+'.out', 'w') as output:
+                with open(fp+'.err', 'w') as err:
                     ret_code = call(cmd, shell=True, stdout=output, stderr=err)
             print("""worker %i completed task %i with return code %i""" % (rank, work_ID, ret_code))
             comm.send(("work_done", rank, work_ID, ret_code, cmd),  dest=0, tag=0)
@@ -94,7 +98,8 @@ else:
         atexit.register(writeLog)        
         workers = {}
         num_workers_killed = 0
-        makeLogDir(logfile_path);
+        if logfile_path:
+            makeLogDir(logfile_path);
         while True:
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
