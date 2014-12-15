@@ -57,7 +57,7 @@ if rank > 0:
             (work_ID, cmd) = msg
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
             ret_code = -1
-            with open(jobfilename+'.task_%s.out' % work_ID, 'w') as output:
+            with open(os.path.join(logfile_path,jobfilename+'.task_%s.out' % work_ID), 'w') as output:
                 with open(jobfilename+'.task_%s.err' % work_ID, 'w') as err:
                     ret_code = call(cmd, shell=True, stdout=output, stderr=err)
             print("""worker %i completed task %i with return code %i""" % (rank, work_ID, ret_code))
