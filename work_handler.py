@@ -60,7 +60,7 @@ if rank > 0:
             if logfile_path:
                 fp = os.path.join(logfile_path,'task_%s' % work_ID)
             else:
-                fp = jobfilename+'.task_%s'
+                fp = jobfilename+('.task_%s' % work_ID)
             with open(fp+'.out', 'w') as output:
                 with open(fp+'.err', 'w') as err:
                     ret_code = call(cmd, shell=True, stdout=output, stderr=err)
