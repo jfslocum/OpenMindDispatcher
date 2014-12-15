@@ -56,7 +56,8 @@ if rank > 0:
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
             ret_code = -1
             with open(jobfilename+'.task_%s.out' % work_ID, 'w') as output:
-                ret_code = call(cmd, shell=True, stdout=output, stderr=subprocess.STDOUT)
+                with open(jobfilename+'.task_%s.err' % work_ID, 'w') as err:
+                    ret_code = call(cmd, shell=True, stdout=output, stderr=err)
             print("""worker %i completed task %i with return code %i""" % (rank, work_ID, ret_code))
             comm.send(("work_done", rank, work_ID, ret_code, cmd),  dest=0, tag=0)
         else:
