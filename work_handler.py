@@ -1,24 +1,22 @@
 #!/cm/shared/openmind/anaconda/2.1.0/bin/python
 print("Initializing work handler... ")
 
-print("importing subprocess...")
 from subprocess import call
 import subprocess
-print("importing sys")
 import sys
-print("importing os.path")
 import os.path
-print("cpickle")
+import os
 import cPickle
-print("atexit")
 import atexit
-print("mpi")
 from mpi4py import MPI
 
 print("Imports successful")
 
 #"/home/jslocum/OpenMindDispatcher/testing/test.txt"
 jobfilename = sys.argv[1]
+logfile_path = './'
+if(len(sys.argv) > 2):
+    logfile_path = sys.argv[2]
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -40,7 +38,11 @@ def getNextJob(joblist):
         return [9001, 'echo "JOBLIST EMPTY ON DISPATCHER BUT STILL RECIEVED JOB"']
     else:
         return joblist[0].popitem()
-    
+
+def makeLogDir(logfile_path):
+    if not os.path.exists(logfile_path):
+        os.makedirs(logfile_path)
+            
 #each worker sends its work requests, and the dispatcher loops with an indiscriminate recieve,
 #servicing requests as they arrive
 
@@ -92,6 +94,7 @@ else:
         atexit.register(writeLog)        
         workers = {}
         num_workers_killed = 0
+        makeLogDir();
         while True:
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
