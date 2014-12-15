@@ -3,6 +3,7 @@ print("Initializing work handler... ")
 
 print("importing subprocess...")
 from subprocess import call
+import subprocess
 print("importing sys")
 import sys
 print("importing os.path")
@@ -53,7 +54,9 @@ if rank > 0:
         if msg:
             (work_ID, cmd) = msg
             print("""worker %i now executing task `%s`""" % (rank, work_ID))
-            ret_code = call(cmd, shell=True)
+            ret_code = -1
+            with open(jobfilename+'.task_%s.out' % work_ID, 'w') as output:
+                ret_code = call(cmd, shell=True, stdout=output, stderr=subprocess.STDOUT)
             print("""worker %i completed task %i with return code %i""" % (rank, work_ID, ret_code))
             comm.send(("work_done", rank, work_ID, ret_code, cmd),  dest=0, tag=0)
         else:
