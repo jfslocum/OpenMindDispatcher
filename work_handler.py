@@ -94,7 +94,7 @@ else:
         atexit.register(writeLog)        
         workers = {}
         num_workers_killed = 0
-        makeLogDir();
+        makeLogDir(logfile_path);
         while True:
             print("Dispatcher looking for job requests")
             msg = comm.recv(source = MPI.ANY_SOURCE, tag = 0);
