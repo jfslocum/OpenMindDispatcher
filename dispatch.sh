@@ -1,2 +1,7 @@
 #!/bin/bash
-mpiexec.hydra -bootstrap slurm -n 10 ./work_handler.py $1 $2
+#SBATCH --time=7-0:0
+module add openmind/anaconda/2.1.0 #provides access to python2.7, mpi and hydra
+module add mit/matlab/2014a #MATLAB
+echo "Number of cpu's is" $((SLURM_CPUS_PER_TASK * SLURM_JOB_NUM_NODES))
+mpiexec.hydra -bootstrap slurm -n $((SLURM_CPUS_PER_TASK * SLURM_JOB_NUM_NODES)) ./work_handler.py $1 $2
+

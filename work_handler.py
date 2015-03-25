@@ -1,4 +1,5 @@
 #!/cm/shared/openmind/anaconda/2.1.0/bin/python
+
 print("Initializing work handler... ")
 
 from subprocess import call
@@ -20,7 +21,7 @@ if(len(sys.argv) > 2):
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
-num_workers = int(os.environ['SLURM_NTASKS']) - 1
+num_workers = int(os.environ['SLURM_CPUS_PER_TASK']) - 1
 
 def constructJoblist(jobfile):
     joblist = [{},{}] #incomplete, complete
