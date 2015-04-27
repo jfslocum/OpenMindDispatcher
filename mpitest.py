@@ -2,7 +2,7 @@
 from mpi4py import MPI
 import os
 comm = MPI.COMM_WORLD
-rank = int(os.environ['SLURM_PROCID'])
+rank = comm.Get_rank()
 
 if rank == 0:
     data = {'a': 7, 'b': 3.14}
