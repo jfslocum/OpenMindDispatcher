@@ -73,7 +73,7 @@ if rank > 0:
 else:
     if num_workers ==0:
         exit(0)
-    print("dispatcher now online; comm rank is " + str(comm.Get_rank()))
+    print("dispatcher now online; comm rank is " + str(comm.Get_rank()) + "; have %i workers" % num_workers)
     with open(jobfilename) as jobfile:
         pcklfilename = jobfilename + ".pckl"
         joblist = []
